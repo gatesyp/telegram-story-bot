@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+from os import environ
 
 export interface StandupGroup {
     chatId: number;
@@ -26,7 +27,7 @@ export const sendMsg = async (
     chat_id: number,
     reply_to_message_id: number = null
   ) => {
-    const url = `https://api.telegram.org/bot${process.env.TELEGRAM_API_KEY}/sendMessage`;
+    const url = `https://api.telegram.org/bot${environ['TELEGRAM_API_KEY']}/sendMessage`;
     const data = {
       reply_to_message_id,
       chat_id,

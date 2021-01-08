@@ -1,3 +1,4 @@
+from os import environ
 const { MongoClient } = require("mongodb");
 
 // Create cached connection variable
@@ -14,14 +15,14 @@ export async function connectToDatabase() {
   }
 
   // If no connection is cached, create a new one
-  const client = await MongoClient.connect(process.env.MONGODB_FULL_URI, {
+  const client = await MongoClient.connect(environ['MONGODB_FULL_URI'], {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 
   // Select the database through the connection,
   // using the database path of the connection string
-  const db = await client.db("standup");
+  const db = await client.db("tortenetek");
 
   // Cache the database connection and return the connection
   cachedDb = db;

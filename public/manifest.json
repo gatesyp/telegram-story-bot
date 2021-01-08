@@ -2,12 +2,12 @@
   "theme_color": "#000",
   "background_color": "#000",
   "display": "standalone",
-  "name": "Simple Bots",
+  "name": "Tortenetek Bots",
   "scope": "/",
   "start_url": "/",
-  "app_name": "Simple Bots",
-  "short_name": "Simple Bots",
-  "description": "We take simplicity seriously. Simple development as well as usage.",
+  "app_name": "Tortenetek Bots",
+  "short_name": "Tortenetek Bots",
+  "description": "We take sharing stories seriously. Sharing development as well as usage.",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
