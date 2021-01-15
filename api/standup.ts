@@ -52,16 +52,18 @@ const sendAboutMessage = async (
   chatId: number,
   userId: number,
   about: About,
-  messageId: number,
+  messageId: number
 ) => {
   const db = await connectToDatabase();
-
+  
   const group = await db.collection("groups").findOne({ chatId });
   if (group) {
   return sendMsg(JSON.stringify(group), chatId, messageId)
   }
   return sendMsg('There is no group for this channel. Create a group with /join', chatId, messageId)
 };
+
+
 const submitStandup = async (
   chatId: number,
   userId: number,
@@ -69,11 +71,21 @@ const submitStandup = async (
   messageId: number,
   message
 ) => {
+
+  // chatter sent bot a message. 
+  // only save their update if its that persons turn. if it's not, say its not their turn and tell them who's turn it is. 
+
+  // access database
   const db = await connectToDatabase();
+  const todayPerson = await db.collection("updates")
+  // grab todaysPerson
+  // if chatter.id is same as todaysPersons.id
+  // 
+
   const addUpdate = await db.collection("groups").updateOne(
-    { "members.about.id": userId },
-    {
-      $set: {
+  { "members.about.id": userId },
+  {
+    $set: {
         "members.$[elem].submitted": true,
         "members.$[elem].botCanMessage": true,
         "members.$[elem].lastSubmittedAt": Date.now(),
@@ -84,10 +96,10 @@ const submitStandup = async (
   );
 
   if (addUpdate.modifiedCount) {
-    return sendMsg("Your update has been submitted.", chatId, messageId, true);
+    return sendMsg("It is not your turn to post.", chatId, messageId, true);
   }
   return sendMsg(
-    "You aren't currently part of a standup group. Add this bot to your group, then use the /join comand to create a standup group",
+    "You aren't currently part of a standup group. Add this bot to your group, then send /join@TortenetekBot message in the group to create a standup group",
     chatId,
     messageId
   );
@@ -132,7 +144,7 @@ const addToStandupGroup = async (
   }
 
   return sendMsg(
-    "You've been added to the standup group! Send me a private message @SuperSimpleStandupBot to recieve reminders.",
+    "You've been added to the Tortenetek group! Send me a private message @TortenetekBot to receive reminders.",
     chatId,
     messageId
   );
@@ -143,51 +155,60 @@ export default async (req: NowRequest, res: NowResponse) => {
 
   const { message } = body || {};
   const { chat, entities, text, message_id, from } = message || {};
-  const isGroupCommand =
-    entities &&
-    entities[0] &&
-    entities[0].type === "bot_command" &&
-    chat.type === "group";
-  const isJoinCommand = isGroupCommand && text.search("/join") !== -1;
-  const isLeaveCommand = isGroupCommand && text.search("/leave") !== -1;
-  const isAboutCommand = isGroupCommand && text.search("/about") !== -1;
-  const isPrivateMessage = chat && chat.type === "private";
 
-  const isPrivateCommand =
-    entities &&
-    entities[0] &&
-    entities[0].type === "bot_command" &&
-    chat &&
-    chat.type === "private";
-  const isPrivateStartCommand =
-    isPrivateCommand && text.search("/start") !== -1;
+  const r = await sendMsg(text, chat.id, message_id);
+  return res.json({ status: r.status });
 
-  if (isPrivateStartCommand) {
-    await startBot(from.id);
-    const r = await sendMsg(standupTemplate, chat.id, message_id);
-    return res.json({ status: r.status });
-  } else if (isPrivateCommand) {
-    const r = await sendMsg(
-      "This command will not work in a private message. Please add me to a group to use this command.",
-      chat.id,
-      message_id
-    );
-    return res.json({ status: r.status });
-  } else if (isPrivateMessage) {
-    const r = await submitStandup(chat.id, from.id, from, message_id, text);
-    return res.json({ status: r.status });
-  }
 
-  if (isJoinCommand) {
-    const r = await addToStandupGroup(chat.id, from.id, from, message_id);
-    return res.json({ status: r.status });
-  } else if (isAboutCommand) {
-    const r = await sendAboutMessage(chat.id, from.id, from, message_id);
-    return res.json({ status: r.status });
-  } else if (isLeaveCommand) {
-    const r = await leaveStandupGroup(chat.id, from.id, from, message_id);
-    return res.json({ status: r.status });
-  } else {
-    return res.json({ status: 500 });
-  }
+  // const isGroupCommand =
+  //   entities &&
+  //   entities[0] &&
+  //   entities[0].type === "bot_command" &&
+  //   chat.type === "group";
+  // const isJoinCommand = isGroupCommand && text.search("/join") !== -1;
+  // const isLeaveCommand = isGroupCommand && text.search("/leave") !== -1;
+  // const isAboutCommand = isGroupCommand && text.search("/about") !== -1;
+  // const isPrivateMessage = chat && chat.type === "private";
+
+  // const isPrivateCommand =
+  //   entities &&
+  //   entities[0] &&
+  //   entities[0].type === "bot_command" &&
+  //   chat &&
+  //   chat.type === "private";
+  // const isPrivateStartCommand =
+  //   isPrivateCommand && text.search("/start") !== -1;
+
+  // if (isPrivateStartCommand) {
+  //   await startBot(from.id);
+  //   const r = await sendMsg(standupTemplate, chat.id, message_id);
+  //   return res.json({ status: r.status });
+  // } else if (isPrivateCommand) {
+  //   const r = await sendMsg(
+  //     "This command will not work in a private message. Please add me to a group to use this command.",
+  //     chat.id,
+  //     message_id
+  //   );
+  //   return res.json({ status: r.status });
+  // } else if (isPrivateMessage) {
+  //   const r = await submitStandup(chat.id, from.id, from, message_id, text);
+  //   return res.json({ status: r.status });
+  // }
+
+  // if (isJoinCommand) {
+  //   const r = await addToStandupGroup(chat.id, from.id, from, message_id);
+  //   return res.json({ status: r.status });
+  // }
+  // // else if (isAboutCommand) {
+  // //   const r = await sendAboutMessage(chat.id, from.id, from, message_id);
+  // //   return res.json({ status: r.status });
+  // // } 
+  // else if (isLeaveCommand) {
+  //   const r = await leaveStandupGroup(chat.id, from.id, from, message_id);
+  //   return res.json({ status: r.status });
+  // } 
+  // else {
+  //   const r = await sendAboutMessage(chat.id, from.id, from, message_id);
+  //   return res.json({ status: r.status });
+  // }
 };
