@@ -1,22 +1,16 @@
 # About 
-Super simple standup bot brings standup functionality to Telegram. Group members are able to submit updates, and they are all sent to a shared channel at a set time. 
+A landing page for bots Steven + Co are writing. 
 
-There are many good standup bots for Slack - [GeekBot](https://geekbot.com/), [Standuply](https://standuply.com/), [Polly](https://www.polly.ai/template/daily-standup) but there are not any good alternatives for Telegram. 
+Using russeii/standup as boilerplate for most of the code. 
 
-
+# Current Bots
+- [@AutoTldrBot](https://t.me/AutoTldrBot), a Telegram-focused remake of the very popular reddit.com/u/autotldr. 
+- [@TortenetekBot](https://t.me/TortenetekBot), a bot that selects 1 person at random from a groupchat, and that person has 24 hours to respond with a life update that is shared with the group.  
 
 # How to use 
-1. Send a message to [@SuperSimpleStandupBot](https://t.me/supersimplestandupbot) on telegram.
-2. Add [@SuperSimpleStandupBot](https://t.me/supersimplestandupbot) to the group you would like to use it in.
-3. Type `/join` in the chat you want the standups to be posted in, and you will be added to the standup group.
-4. Make sure each person private messages the bot, or they will not recieve reminders to post their standup.
-
-# Info
-Standups are currently posted at 10am est.
-Reminders are sent out at 8am est, 9am est, 9:30 est, and 9:45 est if an update has not been submitted. 
+1. Check out the branches to see what bots are currently under development
+2. Switch to whatever branch you are interested in
+3. Follow the README instructions for that branch
 
 # Support
-Send a message to [@deephire](https://t.me/deephire) or create a github issue if you are having problems with the bot. 
-
-# Other bots
-Details coming soon...
+Send a message to [@deephire](https://t.me/deephire) or create a github issue if you are having problems with any bots
