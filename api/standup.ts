@@ -1,6 +1,7 @@
 import { NowRequest, NowResponse } from "@vercel/node";
 import { connectToDatabase } from "./_connectToDatabase";
 import { sendMsg, StandupGroup, Member, About } from "./_helpers";
+const axios = require('axios')
 
 const standupTemplate = `Welcome! Simply post your standup here and it will automatically be posted to your group at 10m. You will recieve a few reminders if you do not submit your standup before 8am the day of.
 Please use the following template for your standups:
@@ -156,59 +157,25 @@ export default async (req: NowRequest, res: NowResponse) => {
   const { message } = body || {};
   const { chat, entities, text, message_id, from } = message || {};
 
-  const r = await sendMsg(text, chat.id, message_id);
+  const url_regex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm
+  const matches = text.match(url_regex);
+  // if(matches !== null){
+    
+  //   try {
+  //     const smmry_api = 'https://api.smmry.com/?SM_API_KEY=339EB2FA9C&SM_URL=' + matches[0]
+  //     const response = await axios.get(smmry_api)
+  //     const r = await sendMsg(response.data.sm_api_content, chat.id, message_id);  
+  //     return res.json({ status: r.status });
+  //   } catch (error) {
+  //     const r = await sendMsg(JSON.stringify(error), chat.id, message_id);  
+  //     return res.json({ status: r.status });
+  //   }
+  // }
+  // else {
+  //   const r = await sendMsg("no url", chat.id, message_id);  
+  //   return res.json({ status: r.status });
+  // }
+  const r = await sendMsg("no url", chat.id, message_id);  
   return res.json({ status: r.status });
 
-
-  // const isGroupCommand =
-  //   entities &&
-  //   entities[0] &&
-  //   entities[0].type === "bot_command" &&
-  //   chat.type === "group";
-  // const isJoinCommand = isGroupCommand && text.search("/join") !== -1;
-  // const isLeaveCommand = isGroupCommand && text.search("/leave") !== -1;
-  // const isAboutCommand = isGroupCommand && text.search("/about") !== -1;
-  // const isPrivateMessage = chat && chat.type === "private";
-
-  // const isPrivateCommand =
-  //   entities &&
-  //   entities[0] &&
-  //   entities[0].type === "bot_command" &&
-  //   chat &&
-  //   chat.type === "private";
-  // const isPrivateStartCommand =
-  //   isPrivateCommand && text.search("/start") !== -1;
-
-  // if (isPrivateStartCommand) {
-  //   await startBot(from.id);
-  //   const r = await sendMsg(standupTemplate, chat.id, message_id);
-  //   return res.json({ status: r.status });
-  // } else if (isPrivateCommand) {
-  //   const r = await sendMsg(
-  //     "This command will not work in a private message. Please add me to a group to use this command.",
-  //     chat.id,
-  //     message_id
-  //   );
-  //   return res.json({ status: r.status });
-  // } else if (isPrivateMessage) {
-  //   const r = await submitStandup(chat.id, from.id, from, message_id, text);
-  //   return res.json({ status: r.status });
-  // }
-
-  // if (isJoinCommand) {
-  //   const r = await addToStandupGroup(chat.id, from.id, from, message_id);
-  //   return res.json({ status: r.status });
-  // }
-  // // else if (isAboutCommand) {
-  // //   const r = await sendAboutMessage(chat.id, from.id, from, message_id);
-  // //   return res.json({ status: r.status });
-  // // } 
-  // else if (isLeaveCommand) {
-  //   const r = await leaveStandupGroup(chat.id, from.id, from, message_id);
-  //   return res.json({ status: r.status });
-  // } 
-  // else {
-  //   const r = await sendAboutMessage(chat.id, from.id, from, message_id);
-  //   return res.json({ status: r.status });
-  // }
 };
