@@ -10,6 +10,48 @@ Today -
 
 Roadblocks - `;
 
+const selectNewUpdater = async (
+  chatId: number,
+  userId: number,
+  about: About,
+  messageId: number
+) => {
+  const db = await connectToDatabase();
+  const groupMembers = await db.collection("groups").find(
+    {
+      chatId,
+    }
+  );
+  return sendMsg(
+    "HELLO",
+    chatId,
+    messageId
+  );
+};
+const secretStart = async (
+  chatId: number,
+  userId: number,
+  about: About,
+  messageId: number
+) => {
+  let stuff = await selectNewUpdater(chatId, userId, about, messageId);
+  /*const db = await connectToDatabase();
+  const removedUserFromGroup = await db.collection("groups").updateOne(
+    {
+      chatId,
+    },
+    { $pull: { members: { "about.id": userId } } }
+  );
+  if (removedUserFromGroup.modifiedCount) {
+    return sendMsg("You have left the group.", chatId, messageId);
+  }
+
+  return sendMsg(
+    "You aren't currently in a group. Join with /join !",
+    chatId,
+    messageId
+  );*/
+};
 const leaveStandupGroup = async (
   chatId: number,
   userId: number,
@@ -139,6 +181,9 @@ const addToStandupGroup = async (
 };
 
 export default async (req: NowRequest, res: NowResponse) => {
+  return res.json({ status: 200 });
+
+  
   const { body } = req;
 
   const { message } = body || {};
@@ -151,6 +196,7 @@ export default async (req: NowRequest, res: NowResponse) => {
   const isJoinCommand = isGroupCommand && text.search("/join") !== -1;
   const isLeaveCommand = isGroupCommand && text.search("/leave") !== -1;
   const isAboutCommand = isGroupCommand && text.search("/about") !== -1;
+  const isSecretStartCommand = isGroupCommand && text.search("/secretstart") !== -1;
   const isPrivateMessage = chat && chat.type === "private";
 
   const isPrivateCommand =
@@ -187,7 +233,12 @@ export default async (req: NowRequest, res: NowResponse) => {
   } else if (isLeaveCommand) {
     const r = await leaveStandupGroup(chat.id, from.id, from, message_id);
     return res.json({ status: r.status });
-  } else {
+  } 
+  else if (isSecretStartCommand) {
+    const r = await secretStart(chat.id, from.id, from, message_id);
+    return res.json({ status: r.status });
+  }
+  else {
     return res.json({ status: 500 });
   }
 };
