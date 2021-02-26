@@ -6,7 +6,7 @@ import { sendMsg, StandupGroup, Member, About } from "./_helpers";
 
 module.exports = async (req: NowRequest, res: NowResponse) => {
 
-    
+
   const db = await connectToDatabase();
 
     const addUpdate = async () => { await db.collection("groups").updateMany(
@@ -24,7 +24,10 @@ module.exports = async (req: NowRequest, res: NowResponse) => {
 
   const sentStandup = [];
   groups.forEach((group: StandupGroup) => {
-    group.members.forEach((member: Member) => {
+    var item = group.members[Math.floor(Math.random() * group.members.length)];
+    var items = [item];
+
+    items.forEach((member: Member) => {
       sentStandup.push(
         sendMsg(member.about.first_name + " (@" + member.about.username + "): \n" + member.update, group.chatId)
       );

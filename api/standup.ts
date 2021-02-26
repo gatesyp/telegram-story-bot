@@ -4,7 +4,7 @@ import { sendMsg, StandupGroup, Member, About } from "./_helpers";
 
 const standupTemplate = `Welcome! Simply post your standup here and it will automatically be posted to your group at 10m. You will recieve a few reminders if you do not submit your standup before 8am the day of.
 Please use the following template for your standups:
-Yesterday - 
+Yesterday -
 
 Today -
 
@@ -181,9 +181,6 @@ const addToStandupGroup = async (
 };
 
 export default async (req: NowRequest, res: NowResponse) => {
-  return res.json({ status: 200 });
-
-  
   const { body } = req;
 
   const { message } = body || {};
@@ -232,10 +229,6 @@ export default async (req: NowRequest, res: NowResponse) => {
     return res.json({ status: r.status });
   } else if (isLeaveCommand) {
     const r = await leaveStandupGroup(chat.id, from.id, from, message_id);
-    return res.json({ status: r.status });
-  } 
-  else if (isSecretStartCommand) {
-    const r = await secretStart(chat.id, from.id, from, message_id);
     return res.json({ status: r.status });
   }
   else {

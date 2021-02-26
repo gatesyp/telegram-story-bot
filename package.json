@@ -12,6 +12,7 @@
   "dependencies": {
     "mongodb": "^3.6.3",
     "node-fetch": "^2.6.1",
+    "npm": "^7.6.0",
     "svelte": "^3.24.0"
   },
   "devDependencies": {
