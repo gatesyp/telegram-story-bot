@@ -174,13 +174,14 @@ const addToStandupGroup = async (
   }
 
   return sendMsg(
-    "You've been added to the standup group! Send me a private message @SuperSimpleStandupBot to recieve reminders.",
+    "You've been added to the standup group! Send me a private message @TortenetekBot to recieve reminders.",
     chatId,
     messageId
   );
 };
 
 export default async (req: NowRequest, res: NowResponse) => {
+
   const { body } = req;
 
   const { message } = body || {};
