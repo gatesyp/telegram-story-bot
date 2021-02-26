@@ -26,7 +26,7 @@ module.exports = async (req: NowRequest, res: NowResponse) => {
   groups.forEach((group: StandupGroup) => {
     group.members.forEach((member: Member) => {
       sentStandup.push(
-        sendMsg("This lovely update is from: " + member.about.first_name + " (@" + member.about.username + "): \n" + member.update, group.chatId)
+        sendMsg("Na, ez a beszéd!!!!! " + member.about.first_name + " (@" + member.about.username + "): \n" + member.update, group.chatId)
       );
 
     });
