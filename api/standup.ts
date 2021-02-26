@@ -2,13 +2,7 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import { connectToDatabase } from "./_connectToDatabase";
 import { sendMsg, StandupGroup, Member, About } from "./_helpers";
 
-const standupTemplate = `Welcome! Simply post your standup here and it will automatically be posted to your group at 10m. You will recieve a few reminders if you do not submit your standup before 8am the day of.
-Please use the following template for your standups:
-Yesterday -
-
-Today -
-
-Roadblocks - `;
+const standupTemplate = `Welcome! When you get selected for an update, you'll receive another message letting you know when to submit your message.`;
 
 const selectNewUpdater = async (
   chatId: number,
@@ -129,7 +123,7 @@ const submitStandup = async (
     return sendMsg("Your update has been submitted.", chatId, messageId);
   }
   return sendMsg(
-    "You aren't currently part of a standup group. Add this bot to your group, then use the /join comand to create a standup group",
+    "You aren't currently part of a group. Add this bot to your group, then use the /join comand to create a group",
     chatId,
     messageId
   );

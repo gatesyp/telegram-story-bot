@@ -14,7 +14,7 @@ module.exports = async (req: NowRequest, res: NowResponse) => {
 
     items.forEach((member: Member) => {
       if (member.submitted === false) {
-        reminders.push(sendMsg("Reminder, please submit an update. Updates are due by 10am est", member.about.id))
+        reminders.push(sendMsg("Hello, you've been selected! Please submit an update. Update is due by 6pm.", member.about.id))
       }
     });
   });
