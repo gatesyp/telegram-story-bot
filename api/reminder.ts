@@ -9,7 +9,10 @@ module.exports = async (req: NowRequest, res: NowResponse) => {
 
   const reminders = []
   groups.forEach((group: StandupGroup) => {
-    group.members.forEach((member: Member) => {
+    var item = group.members[Math.floor(Math.random() * group.members.length)];
+    var items = [item];
+
+    items.forEach((member: Member) => {
       if (member.submitted === false) {
         reminders.push(sendMsg("Reminder, please submit an update. Updates are due by 10am est", member.about.id))
       }

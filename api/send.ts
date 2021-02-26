@@ -24,10 +24,7 @@ module.exports = async (req: NowRequest, res: NowResponse) => {
 
   const sentStandup = [];
   groups.forEach((group: StandupGroup) => {
-    var item = group.members[Math.floor(Math.random() * group.members.length)];
-    var items = [item];
-
-    items.forEach((member: Member) => {
+    group.members.forEach((member: Member) => {
       sentStandup.push(
         sendMsg(member.about.first_name + " (@" + member.about.username + "): \n" + member.update, group.chatId)
       );
